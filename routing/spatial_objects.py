@@ -4,14 +4,17 @@
 from __future__ import annotations
 
 import math
+from typing import Iterator
 
 
 class Point:
     """Точка на плоскости"""
 
+    PRECISION = 6  # Количество знаков после запятой в координатах, расстояниях между точками
+
     def __init__(self, x: float, y: float) -> None:
-        self._x = x
-        self._y = y
+        self._x = round(x, self.PRECISION)
+        self._y = round(y, self.PRECISION)
 
     def __eq__(self, other) -> bool:
         return self._x == other.x and self._y == other.y if isinstance(other, Point) else False
@@ -31,7 +34,7 @@ class Point:
         return self._y
 
     def get_distance_to(self, point: Point) -> float:
-        return math.sqrt((self._x - point.x) ** 2 + (self._y - point.y) ** 2)
+        return round(math.sqrt((self._x - point.x) ** 2 + (self._y - point.y) ** 2), self.PRECISION)
 
 
 class Cluster:
@@ -42,6 +45,9 @@ class Cluster:
 
     def __len__(self) -> int:
         return len(self.points)
+
+    def __iter__(self) -> Iterator:
+        return iter(self.points)
 
     def get_geometric_center(self) -> Point:
         """Вычислить геометрический центр кластера"""
