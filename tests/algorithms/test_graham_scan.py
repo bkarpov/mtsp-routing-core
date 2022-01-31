@@ -5,7 +5,7 @@ from routing import spatial_objects as sp
 from routing.algorithms import graham_scan as gs
 
 
-def test_cross_product() -> None:
+def test_cross_product_calculation() -> None:
     """Тест подсчета векторного произведения векторов
 
     Если вектор из векторного произведения направлен вверх, то выполнен поворот по часовой стрелке"""

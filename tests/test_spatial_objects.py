@@ -13,7 +13,7 @@ data = (
 
 
 @pytest.mark.parametrize(arguments, data)
-def test_distance_between_points(start: sp.Point, finish: sp.Point, distance: float) -> None:
+def test_calculation_distance_between_points(start: sp.Point, finish: sp.Point, distance: float) -> None:
     """Тест подсчета Евклидова расстояния"""
 
     assert start.get_distance_to(finish) == finish.get_distance_to(start) == distance
@@ -27,7 +27,7 @@ data = (
 
 
 @pytest.mark.parametrize(arguments, data)
-def test_cluster_geometric_center(cluster: sp.Cluster, center: sp.Point) -> None:
+def test_getting_geometric_center_of_cluster(cluster: sp.Cluster, center: sp.Point) -> None:
     """Тест вычисления геометрического центра кластера"""
 
     assert cluster.get_geometric_center() == center
