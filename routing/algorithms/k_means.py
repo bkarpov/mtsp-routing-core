@@ -13,6 +13,12 @@ from routing.algorithms import graham_scan as gs
 _MAX_ITERATIONS = 10  # Предельное количество итераций в K-Means
 
 
+class KMeansError(Exception):
+    """Ошибка в алгоритме K-Means"""
+
+    pass
+
+
 def k_means(points: list[sp.Point], clusters_amt: int) -> list[sp.Cluster]:
     """Алгоритм K-Means с ограничением максимального размера кластера
 
@@ -177,7 +183,9 @@ def _divide_points_into_clusters(
     min_cost_flow.SetNodeSupply(sink_idx, -len(points))
 
     status = min_cost_flow.Solve()
-    assert status == min_cost_flow.OPTIMAL, "the optimal solution was not found in the network"
+
+    if status != min_cost_flow.OPTIMAL:
+        raise KMeansError("the optimal solution was not found in the network")
 
     clusters = [sp.Cluster([]) for _ in range(clusters_amt)]
 
