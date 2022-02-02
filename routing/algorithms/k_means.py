@@ -41,11 +41,6 @@ def k_means(points: list[sp.Point], clusters_amt: int) -> list[sp.Cluster]:
         Стабилизированные кластеры, полученные при разделении переданного списка точек
     """
 
-    if not points:
-        raise ValueError("empty list of clustering points")
-    elif clusters_amt <= 0:
-        raise ValueError("wrong amount of clusters")
-
     if clusters_amt == 1:
         return [sp.Cluster(points)]
     elif clusters_amt >= len(points):
