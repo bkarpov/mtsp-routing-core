@@ -32,7 +32,7 @@ def test_clustering_without_remainder() -> None:
     for cluster in result:
         max_distance = 0
 
-        for first, second in itertools.combinations(cluster.points, 2):
+        for first, second in itertools.combinations(cluster, 2):
             max_distance = max(max_distance, first.get_distance_to(second))
 
         max_distance_in_clusters.append(max_distance)

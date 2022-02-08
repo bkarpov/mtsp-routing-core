@@ -161,7 +161,7 @@ def _divide_points_into_clusters(
         for j in range(len(points) + 1, len(points) + clusters_amt + 1):  # Добавить ребра от вершины до центроидов
             centroid = centroids[j - len(points) - 1]
             min_cost_flow.AddArcWithCapacityAndUnitCost(
-                i, j, 1, int(point.get_distance_to(centroid) * (10 ** sp.Point.PRECISION))
+                i, j, 1, int(point.get_distance_to(centroid) * (10 ** sp.PRECISION))
             )  # Индексы центроидов от n+1 до n+k включительно
 
         min_cost_flow.SetNodeSupply(i, 0)  # Задать 0 количество юнитов для вершины
@@ -187,7 +187,7 @@ def _divide_points_into_clusters(
     if status != min_cost_flow.OPTIMAL:
         raise KMeansError("the optimal solution was not found in the network")
 
-    clusters = [sp.Cluster([]) for _ in range(clusters_amt)]
+    clusters: list[sp.Cluster[sp.Point]] = [sp.Cluster() for _ in range(clusters_amt)]
 
     for arc in range(min_cost_flow.NumArcs()):
         arc_between_node_and_centroid = min_cost_flow.Tail(arc) != 0 and min_cost_flow.Head(arc) != sink_idx
@@ -195,6 +195,7 @@ def _divide_points_into_clusters(
         if arc_between_node_and_centroid and min_cost_flow.Flow(arc):  # У использованных ребер не нулевой поток
             point_idx = min_cost_flow.Tail(arc) - 1
             centroid_idx = min_cost_flow.Head(arc) - len(points) - 1
-            clusters[centroid_idx].points.append(points[point_idx])
+            cluster: sp.Cluster = clusters[centroid_idx]
+            cluster.append(points[point_idx])
 
     return clusters
