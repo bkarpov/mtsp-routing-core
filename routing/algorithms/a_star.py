@@ -52,6 +52,8 @@ def a_star(start: sp.Point, finish: sp.Point, graph: sp.Graph) -> list[sp.Segmen
             while data[current_node].edge is not None:  # Восстановить путь
                 path.append(data[current_node].edge)
                 current_node = data[current_node].parent
+
+            path.reverse()  # Развернуть путь, чтобы он был от старта к финишу
             break
 
         for edge in graph.adjacency_lists[current_node]:  # Добавить в очередь все смежные непосещенные вершины
