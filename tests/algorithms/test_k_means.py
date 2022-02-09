@@ -67,11 +67,14 @@ def test_clustering_with_remainder() -> None:
     assert len(result_points) == len(points) and set(result_points) == set(points)  # Все точки кластеризованы
 
 
-@pytest.mark.timeout(60)  # Время выполнения 1 попытки не более 1 минуты
+@pytest.mark.timeout(_limits.CLUSTERING_TIME)
 def test_clustering_performance(benchmark) -> None:
     """Тест производительности кластеризации"""
 
-    points, clusters_amt = _get_test_case(clusters_amt_bounds=(10, 100), points_per_cluster_bounds=(100, 200))
+    points, clusters_amt = _get_test_case(
+        clusters_amt_bounds=(10, _limits.CLUSTERS_AMOUNT),
+        points_per_cluster_bounds=(100, _limits.POINTS_PER_CLUSTER)
+    )
     benchmark.pedantic(km.k_means, (points, clusters_amt), rounds=5)
 
 
