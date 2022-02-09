@@ -8,11 +8,14 @@ import random
 
 import pytest
 
-from routing import spatial_objects as sp
+from routing import _limits
+from routing import _spatial_objects as sp
 from routing.algorithms import k_means as km
 
 
 def test_clustering_without_remainder() -> None:
+    """Тест кластеризации, когда точки делятся на кластеры без остатка"""
+
     points, clusters_amt = _get_test_case(use_remainder=False)
     result = km.k_means(points, clusters_amt)
 
@@ -32,7 +35,7 @@ def test_clustering_without_remainder() -> None:
     for cluster in result:
         max_distance = 0
 
-        for first, second in itertools.combinations(cluster.points, 2):
+        for first, second in itertools.combinations(cluster, 2):
             max_distance = max(max_distance, first.get_distance_to(second))
 
         max_distance_in_clusters.append(max_distance)
@@ -48,6 +51,8 @@ def test_clustering_without_remainder() -> None:
 
 
 def test_clustering_with_remainder() -> None:
+    """Тест кластеризации, когда точки делятся на кластеры с остатком"""
+
     points, clusters_amt = _get_test_case()
     result = km.k_means(points, clusters_amt)
 
@@ -64,6 +69,8 @@ def test_clustering_with_remainder() -> None:
 
 @pytest.mark.timeout(60)  # Время выполнения 1 попытки не более 1 минуты
 def test_clustering_performance(benchmark) -> None:
+    """Тест производительности кластеризации"""
+
     points, clusters_amt = _get_test_case(clusters_amt_bounds=(10, 100), points_per_cluster_bounds=(100, 200))
     benchmark.pedantic(km.k_means, (points, clusters_amt), rounds=5)
 

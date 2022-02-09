@@ -3,11 +3,13 @@
 
 import random
 
-from routing import spatial_objects as sp
+from routing import _spatial_objects as sp
 from routing.algorithms import genetic_algorithm as ga
 
 
 def test_genetic_algorithm() -> None:
+    """Тест решения TSP"""
+
     points = [  # Выпуклая оболочка
         sp.Point(1, 3), sp.Point(2, 2), sp.Point(3, 1), sp.Point(5, 1),
         sp.Point(6, 2), sp.Point(7, 3), sp.Point(7, 5), sp.Point(6, 6),
