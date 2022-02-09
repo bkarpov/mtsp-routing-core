@@ -21,7 +21,7 @@ from __future__ import annotations
 import random
 import time
 
-from routing import spatial_objects as sp
+from routing import _spatial_objects as sp
 
 _POPULATION_SIZE = 50
 _CROSSOVER_SIZE = 30

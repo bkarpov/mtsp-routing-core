@@ -7,7 +7,7 @@ import random
 
 from ortools.graph import pywrapgraph
 
-from routing import spatial_objects as sp
+from routing import _spatial_objects as sp
 from routing.algorithms import graham_scan as gs
 
 _MAX_ITERATIONS = 10  # Предельное количество итераций в K-Means
