@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import math
+from typing import Optional
 
 from routing import _exceptions as ex
 from routing import _limits
@@ -48,7 +49,7 @@ class Point:
 class Cluster(list):
     """Кластер точек"""
 
-    def __init__(self, points: list[Point] = None) -> None:
+    def __init__(self, points: Optional[list[Point]] = None) -> None:
         if not points:
             points = []
 
