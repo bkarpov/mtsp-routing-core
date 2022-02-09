@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import math
+from typing import Generic, Optional, TypeVar
 
 from routing import _exceptions as ex
 from routing import _limits
@@ -45,10 +46,15 @@ class Point:
         return round(math.sqrt((self._x - point.x) ** 2 + (self._y - point.y) ** 2), PRECISION)
 
 
-class Cluster(list):
-    """Кластер точек"""
+T = TypeVar("T")  # Переменная типа
 
-    def __init__(self, points: list[Point] = None) -> None:
+
+class Cluster(list, Generic[T]):
+    """Кластер точек
+
+    Наследование от Generic позволяет использовать выражение Cluster[Point] в аннотациях"""
+
+    def __init__(self, points: Optional[list[Point]] = None) -> None:
         if not points:
             points = []
 
