@@ -1,10 +1,6 @@
 """Тесты отдельных функций, используемых при решении MTSP, и всего решения в целом"""
 
-import random
 
-import pytest
-
-from routing import _limits
 from routing import _spatial_objects as sp
 from routing import solution as sl
 
@@ -87,45 +83,7 @@ def test_route_mapping() -> None:
     assert calculated_route == answer
 
 
-def test_route_mapping_performance() -> None:
-    """Тест производительности поиска пути в графе"""
-
-    points = [sp.Point(random.randint(1, 1000), random.randint(1, 1000)) for _ in range(_limits.POINTS_AMOUNT)]
-    points = list(set(points))  # Удалить дубликаты точек
-
-    edges = []
-
-    for i in range(_limits.EDGES_AMOUNT // _limits.POINTS_AMOUNT):
-        for j in range(1, len(points)):
-            start = random.choice(points[:j])
-            finish = random.choice(points[j:])
-
-            if start == finish:
-                continue
-
-            if start < finish:
-                start, finish = finish, start
-
-            edges.append(  # Соединить случайную обработанную вершину со случайной необработанной
-                sp.Segment(start, finish)
-            )
-
-    edges = list(set(edges))  # Удалить дубликаты ребер
-    graph = sp.Graph()
-
-    for edge in edges:
-        graph.add_edge(edge)
-
-    @pytest.mark.timeout(_limits.MAPPING_TIME)
-    def performance_test() -> None:
-        """Запуск поиска пути в отдельной функции, чтобы не включать в тайминг подготовку данных"""
-
-        sl._map_route_on_graph(sp.Cluster(points), graph)
-
-    performance_test()
-
-
-def test_solution_full() -> None:
+def test_solution() -> None:
     """Тест всего решения
 
     Граф - две выпуклые фигуры, соединенные 1 ребром"""

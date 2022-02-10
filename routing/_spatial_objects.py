@@ -6,9 +6,6 @@ from __future__ import annotations
 import math
 from typing import Generic, Optional, TypeVar
 
-from routing import _exceptions as ex
-from routing import _limits
-
 PRECISION = 6  # Количество знаков после запятой в координатах, расстояниях между точками
 
 
@@ -129,7 +126,6 @@ class Graph:
 
     def __init__(self) -> None:
         self._adjacency_lists: dict[Point, list[Segment]] = {}
-        self._edges_amt = 0
 
     def __contains__(self, item) -> bool:
         return item in self._adjacency_lists
@@ -139,13 +135,8 @@ class Graph:
         return self._adjacency_lists
 
     def add_edge(self, edge: Segment) -> None:
-        if self._edges_amt == _limits.EDGES_AMOUNT:
-            raise ex.LimitExceededError("trying to add an edge to the full graph")
-
         for node in edge.start, edge.finish:
             if node not in self._adjacency_lists:
                 self._adjacency_lists[node] = []
 
             self._adjacency_lists[node].append(edge)
-
-        self._edges_amt += 1
