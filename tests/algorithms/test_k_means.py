@@ -64,24 +64,18 @@ def test_clustering_with_remainder() -> None:
     assert len(result_points) == len(points) and set(result_points) == set(points)  # Все точки кластеризованы
 
 
-def _get_test_case(
-        clusters_amt_bounds=(5, 10),
-        points_per_cluster_bounds=(5, 10),
-        use_remainder=True
-) -> tuple[list[sp.Point], int]:
+def _get_test_case(use_remainder=True) -> tuple[list[sp.Point], int]:
     """Сгенерировать список точек для кластеризации
 
     Args:
-        clusters_amt_bounds: Границы количества кластеров, границы включаются
-        points_per_cluster_bounds: Границы количества точек в кластере, границы включаются
         use_remainder: Добавлять ли дополнительные точки == остаток при делении количества точек на кластеры
 
     Returns:
         Список точек и количество кластеров
     """
 
-    clusters_amt = random.randint(*clusters_amt_bounds)
-    points_per_cluster = random.randint(*points_per_cluster_bounds)
+    clusters_amt = 10
+    points_per_cluster = 25
     points = []
 
     for i in range(clusters_amt):  # Точки по кластерам, расстояние между точками << расстояние между кластерами
