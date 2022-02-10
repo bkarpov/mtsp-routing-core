@@ -5,7 +5,7 @@ from routing import _spatial_objects as sp
 from routing import solution as sl
 
 
-def test_points_reachability_check() -> None:
+def test_points_and_graph_validation() -> None:
     """Тест проверки списков смежности и обхода графа
 
     Граф - две компоненты связности"""

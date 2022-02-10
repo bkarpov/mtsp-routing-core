@@ -5,7 +5,7 @@ from routing import _spatial_objects as sp
 from routing.algorithms import a_star
 
 
-def test_finding_a_path() -> None:
+def test_a_star() -> None:
     """Тест поиска пути в графе"""
 
     square_graph = sp.Graph()
