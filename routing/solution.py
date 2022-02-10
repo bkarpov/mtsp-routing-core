@@ -6,12 +6,13 @@ import multiprocessing as mp
 import random
 from typing import Iterator
 
-from routing import _exceptions as ex
-from routing import _limits
 from routing import _spatial_objects as sp
 from routing.algorithms import a_star
 from routing.algorithms import genetic_algorithm as ga
 from routing.algorithms import k_means
+
+_TSP_TIMELIMIT = 30  # Время решения TSP в 1 кластере
+_ROUTING_TIMELIMIT = 10  # Время построения 1 маршрута в графе
 
 
 def build_routes(
@@ -37,16 +38,10 @@ def build_routes(
 
     if not points:
         raise ValueError("empty list of clustering points")
-    elif len(points) > _limits.POINTS_AMOUNT:
-        raise ex.LimitExceededError("amount of points exceeded the limit")
     elif clusters_amt <= 0:
         raise ValueError("wrong amount of clusters")
-    elif clusters_amt > _limits.CLUSTERS_AMOUNT:
-        raise ex.LimitExceededError("amount of clusters exceeded the limit")
     elif not _points_are_reachable(points, graph):
         raise ValueError("all points in the graph must be reachable")
-    elif len(points) // clusters_amt > _limits.POINTS_PER_CLUSTER:
-        raise ex.LimitExceededError("amount of points per cluster exceeded the limit")
 
     unordered_clusters = k_means.k_means(points, clusters_amt)  # Кластеризовать точки
     ordered_clusters = []
@@ -55,10 +50,10 @@ def build_routes(
         tsp_jobs = []
 
         for cluster in unordered_clusters:
-            tsp_jobs.append(pool.apply_async(ga.genetic_algorithm_for_tsp, (cluster, _limits.TSP_TIME)))
+            tsp_jobs.append(pool.apply_async(ga.genetic_algorithm_for_tsp, (cluster, _TSP_TIMELIMIT)))
 
         for job in tsp_jobs:
-            ordered_clusters.append(job.get(_limits.TSP_TIME + 1))
+            ordered_clusters.append(job.get(_TSP_TIMELIMIT + 1))
 
     with mp.Pool() as pool:  # Построить маршруты в кластерах
         mapping_jobs = []
@@ -66,7 +61,7 @@ def build_routes(
         for cluster in ordered_clusters:
             mapping_jobs.append(pool.apply_async(_map_route_on_graph, (cluster, graph)))
 
-        routes = [job.get(_limits.ROUTING_TIME) for job in mapping_jobs]
+        routes = [job.get(_ROUTING_TIMELIMIT) for job in mapping_jobs]
 
     return zip(ordered_clusters, routes)
 

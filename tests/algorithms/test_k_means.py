@@ -6,9 +6,6 @@ from __future__ import annotations
 import itertools
 import random
 
-import pytest
-
-from routing import _limits
 from routing import _spatial_objects as sp
 from routing.algorithms import k_means as km
 
@@ -65,17 +62,6 @@ def test_clustering_with_remainder() -> None:
 
     result_points = list(itertools.chain(*result))
     assert len(result_points) == len(points) and set(result_points) == set(points)  # Все точки кластеризованы
-
-
-@pytest.mark.timeout(_limits.CLUSTERING_TIME)
-def test_clustering_performance(benchmark) -> None:
-    """Тест производительности кластеризации"""
-
-    points, clusters_amt = _get_test_case(
-        clusters_amt_bounds=(10, _limits.CLUSTERS_AMOUNT),
-        points_per_cluster_bounds=(100, _limits.POINTS_PER_CLUSTER)
-    )
-    benchmark.pedantic(km.k_means, (points, clusters_amt), rounds=5)
 
 
 def _get_test_case(
