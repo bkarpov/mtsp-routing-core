@@ -30,12 +30,13 @@ def test_points_and_graph_validation() -> None:
     for edge in edges:
         graph.add_edge(edge)
 
-    assert not sl._points_are_reachable([sp.Point(0, 0)], graph)
-    assert not sl._points_are_reachable(points, graph)
+    assert sl._find_unreachable_points([sp.Point(0, 0)], graph) == [sp.Point(0, 0)]
+
+    unreachable_points = set(sl._find_unreachable_points(points, graph))
+    assert unreachable_points == set(points[:4]) or unreachable_points == set(points[4:])  # Одна компонента недоступна
 
     graph.add_edge(sp.Segment(sp.Point(2, 3), sp.Point(4, 3)))  # Добавить мост, соединяющий компоненты связности
-
-    assert sl._points_are_reachable(points, graph)
+    assert not sl._find_unreachable_points(points, graph)
 
 
 def test_route_mapping() -> None:
