@@ -40,8 +40,11 @@ def build_routes(
         raise ValueError("empty list of clustering points")
     elif clusters_amt <= 0:
         raise ValueError("wrong amount of clusters")
-    elif not _points_are_reachable(points, graph):
-        raise ValueError("all points in the graph must be reachable")
+
+    unreachable_points = _find_unreachable_points(points, graph)
+
+    if unreachable_points:
+        raise ValueError(f"unreachable points found: {unreachable_points}")
 
     unordered_clusters = k_means.k_means(points, clusters_amt)  # Кластеризовать точки
     ordered_clusters = []
@@ -66,8 +69,8 @@ def build_routes(
     return zip(ordered_clusters, routes)
 
 
-def _points_are_reachable(points: list[sp.Point], graph: sp.Graph) -> bool:
-    """Проверить, что все переданные точки достижимы
+def _find_unreachable_points(points: list[sp.Point], graph: sp.Graph) -> list[sp.Point]:
+    """Найти недостижимые точки
 
     Точки должны быть в графе, т.е. у каждой точки должен быть свой список смежности
     Точки должны быть достижимы из любой другой точки => граф сильно связный
@@ -77,14 +80,20 @@ def _points_are_reachable(points: list[sp.Point], graph: sp.Graph) -> bool:
         graph: Граф, в котором будут строиться маршруты
     """
 
-    for point in points:
+    isolated_points = []
+
+    for point in points:  # Найти изолированные вершины
         if point not in graph:
-            return False
+            points.remove(point)
+            isolated_points.append(point)
+
+    if not points:
+        return isolated_points
 
     stack = [random.choice(points)]
     visited_points = set()
 
-    while stack:  # Обход графа DFS
+    while stack:  # Найти вершины не посещенной компоненты связности
         point = stack.pop()
 
         if point in visited_points:
@@ -95,10 +104,7 @@ def _points_are_reachable(points: list[sp.Point], graph: sp.Graph) -> bool:
         for edge in graph.adjacency_lists[point]:
             stack.append(edge.get_another_border(point))
 
-    if not visited_points.issuperset(points):
-        return False  # Не все точки посещены
-
-    return True
+    return isolated_points + list(set(points) - visited_points)
 
 
 def _map_route_on_graph(ordered_cluster: sp.Cluster, graph: sp.Graph) -> list[sp.Segment]:
