@@ -92,7 +92,7 @@ class Segment:
         self._length = round(length, PRECISION) if length else euclidian_distance
 
     def __eq__(self, other) -> bool:
-        return other.start == self._start and other.finish == self._finish
+        return other.start == self._start and other.finish == self._finish and other.length == self._length
 
     def __hash__(self) -> int:
         return hash((self._start, self._finish))
