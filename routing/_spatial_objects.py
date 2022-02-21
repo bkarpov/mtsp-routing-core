@@ -6,15 +6,21 @@ from __future__ import annotations
 import math
 from typing import Generic, Optional, TypeVar
 
-PRECISION = 6  # Количество знаков после запятой в координатах, расстояниях между точками
+_PRECISION = 6  # Количество знаков после запятой в координатах, расстояниях между точками
+
+
+def get_precision() -> int:
+    """Получить точность расчета координат и расстояний"""
+
+    return _PRECISION
 
 
 class Point:
     """Точка на плоскости"""
 
     def __init__(self, x: float, y: float) -> None:
-        self._x = round(x, PRECISION)
-        self._y = round(y, PRECISION)
+        self._x = round(x, _PRECISION)
+        self._y = round(y, _PRECISION)
 
     def __eq__(self, other) -> bool:
         return self._x == other.x and self._y == other.y
@@ -40,7 +46,7 @@ class Point:
         return self._y
 
     def get_distance_to(self, point: Point) -> float:
-        return round(math.sqrt((self._x - point.x) ** 2 + (self._y - point.y) ** 2), PRECISION)
+        return round(math.sqrt((self._x - point.x) ** 2 + (self._y - point.y) ** 2), _PRECISION)
 
 
 T = TypeVar("T")  # Переменная типа
@@ -89,7 +95,7 @@ class Segment:
         if length and length < euclidian_distance:
             raise ValueError("edge length cannot be less than the Euclidean distance")
 
-        self._length = round(length, PRECISION) if length else euclidian_distance
+        self._length = round(length, _PRECISION) if length else euclidian_distance
 
     def __eq__(self, other) -> bool:
         return other.start == self._start and other.finish == self._finish and other.length == self._length
