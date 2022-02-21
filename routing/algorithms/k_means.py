@@ -145,6 +145,9 @@ def _divide_points_into_clusters(
 
     Returns:
         Кластеры, полученные при разделении переданного списка точек
+
+    Raises:
+        KMeansError: Не найдено решение min-cost max flow для сети
     """
 
     min_cost_flow = pywrapgraph.SimpleMinCostFlow()
@@ -156,7 +159,7 @@ def _divide_points_into_clusters(
         for j in range(len(points) + 1, len(points) + clusters_amt + 1):  # Добавить ребра от вершины до центроидов
             centroid = centroids[j - len(points) - 1]
             min_cost_flow.AddArcWithCapacityAndUnitCost(
-                i, j, 1, int(point.get_distance_to(centroid) * (10 ** sp.PRECISION))
+                i, j, 1, int(point.get_distance_to(centroid) * (10 ** sp.get_precision()))
             )  # Индексы центроидов от n+1 до n+k включительно
 
         min_cost_flow.SetNodeSupply(i, 0)  # Задать 0 количество юнитов для вершины
