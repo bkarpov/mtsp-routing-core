@@ -145,6 +145,9 @@ def _divide_points_into_clusters(
 
     Returns:
         Кластеры, полученные при разделении переданного списка точек
+
+    Raises:
+        KMeansError: Не найдено решение min-cost max flow для сети
     """
 
     min_cost_flow = pywrapgraph.SimpleMinCostFlow()
