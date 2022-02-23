@@ -1,4 +1,4 @@
-[EN](README.md)
+[EN](https://github.com/bkarpov/mtsp-routing-core/blob/main/README.md)
 
 # mtsp-routing-core
 
