@@ -24,7 +24,7 @@ from __future__ import annotations
 import collections
 import heapq
 
-from routing import _spatial_objects as sp
+from routing import spatial_objects as sp
 
 
 def a_star(start: sp.Point, finish: sp.Point, graph: sp.Graph) -> list[sp.Segment]:

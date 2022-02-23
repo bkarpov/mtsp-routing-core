@@ -3,7 +3,7 @@
 
 import pytest
 
-from routing import _spatial_objects as sp
+from routing import spatial_objects as sp
 
 arguments = ("start", "finish", "distance")
 data = (

@@ -6,7 +6,7 @@ import multiprocessing as mp
 import random
 from typing import Iterator
 
-from routing import _spatial_objects as sp
+from routing import spatial_objects as sp
 from routing.algorithms import a_star
 from routing.algorithms import genetic_algorithm as ga
 from routing.algorithms import k_means

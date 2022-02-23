@@ -1,8 +1,8 @@
 """Тесты отдельных функций, используемых при решении MTSP, и всего решения в целом"""
 
 
-from routing import _spatial_objects as sp
 from routing import solution as sl
+from routing import spatial_objects as sp
 
 
 def test_points_and_graph_validation() -> None:
