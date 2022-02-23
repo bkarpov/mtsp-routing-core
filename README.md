@@ -1,4 +1,4 @@
-[RU](README.ru.md)
+[RU](https://github.com/bkarpov/mtsp-routing-core/blob/main/README.ru.md)
 
 # mtsp-routing-core
 
