@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import math
 
-from routing import _spatial_objects as sp
+from routing import spatial_objects as sp
 
 
 def graham_scan(data: list[sp.Point]) -> list[sp.Point]:
