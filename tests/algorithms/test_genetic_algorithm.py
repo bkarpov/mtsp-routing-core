@@ -3,7 +3,7 @@
 
 import random
 
-from routing import _spatial_objects as sp
+from routing import spatial_objects as sp
 from routing.algorithms import genetic_algorithm as ga
 
 

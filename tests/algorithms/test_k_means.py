@@ -6,7 +6,7 @@ from __future__ import annotations
 import itertools
 import random
 
-from routing import _spatial_objects as sp
+from routing import spatial_objects as sp
 from routing.algorithms import k_means as km
 
 
