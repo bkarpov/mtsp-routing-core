@@ -33,7 +33,8 @@ To solve the minimum-cost flow problem (MCFP), the
 
 ### III. Solve the travelling salesman problem (TSP) in each cluster
 
-Execution time in seconds = 30 * K / C, C - number of available CPU threads.
+Execution time in seconds = 30 * K / C, C - number of available processes.
+You can use no more than 1 process on 1 logical processor.
 
 A genetic algorithm is used to solve the problem. The search for a solution for 1 cluster takes 30 seconds.
 
