@@ -54,7 +54,7 @@ To build a route between two vertices, the A* algorithm is used.
 from routing import solution
 
 solution.build_routes(
-    points: list[Point], clusters_amt: int, graph: sp.Graph
+     points: list[Point], clusters_amt: int, graph: sp.Graph, processes_num: int = 0
 ) -> Iterator[tuple[list[Point], list[Segment]]]:
 ```
 
