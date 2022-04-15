@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import multiprocessing as mp
+import os
 import random
 from typing import Iterator
 
@@ -11,12 +12,13 @@ from routing.algorithms import a_star
 from routing.algorithms import genetic_algorithm as ga
 from routing.algorithms import k_means
 
+
 _TSP_TIMELIMIT = 30  # Время решения TSP в 1 кластере
 _ROUTING_TIMELIMIT = 10  # Время построения 1 маршрута в графе
 
 
 def build_routes(
-        points: list[sp.Point], clusters_amt: int, graph: sp.Graph
+        points: list[sp.Point], clusters_amt: int, graph: sp.Graph, processes_num: int = 0
 ) -> Iterator[tuple[list[sp.Point], list[sp.Segment]]]:
     """Проложить указанное число маршрутов
 
@@ -31,6 +33,9 @@ def build_routes(
         points: Список точек, который нужно кластеризовать
         clusters_amt: Количество кластеров, на которые нужно разбить точки
         graph: Граф для прокладывания маршрутов, представленный списками смежности
+        processes_num: Количество процессов, создаваемых для параллельного решения TSP, построения маршрутов в кластерах
+            По умолчанию используется половина логических процессоров
+            Максимальное количество == количество логических процессоров
 
     Returns:
         Кортеж из списка кластеров и списка соответствующих им маршрутов
@@ -46,10 +51,17 @@ def build_routes(
     if unreachable_points:
         raise ValueError(f"unreachable points found: {unreachable_points}")
 
+    if processes_num < 0:
+        raise ValueError("number of processes cannot be negative")
+    elif processes_num > os.cpu_count():
+        raise ValueError("number of processes cannot exceed the number of processors")
+    elif not processes_num:
+        processes_num = os.cpu_count() // 2
+
     unordered_clusters = k_means.k_means(points, clusters_amt)  # Кластеризовать точки
     ordered_clusters = []
 
-    with mp.Pool() as pool:  # Решить TSP в каждом кластере
+    with mp.Pool(processes_num) as pool:  # Решить TSP в каждом кластере
         tsp_jobs = []
 
         for cluster in unordered_clusters:
@@ -58,7 +70,7 @@ def build_routes(
         for job in tsp_jobs:
             ordered_clusters.append(job.get(_TSP_TIMELIMIT + 1))
 
-    with mp.Pool() as pool:  # Построить маршруты в кластерах
+    with mp.Pool(processes_num) as pool:  # Построить маршруты в кластерах
         mapping_jobs = []
 
         for cluster in ordered_clusters:
