@@ -33,7 +33,8 @@
 
 ### III. Решить TSP в каждом кластере
 
-Время выполнения в секундах = 30 * K / C, C - количество доступных потоков.
+Время выполнения в секундах = 30 * K / C, C - количество доступных процессов.
+Максимум можно использовать 1 процесс на 1 логическом процессоре.
 
 Для решения используется генетический алгоритм. Поиск решения для 1 кластера выполняется 30 секунд.
 
@@ -54,7 +55,7 @@
 from routing import solution
 
 solution.build_routes(
-    points: list[Point], clusters_amt: int, graph: sp.Graph
+     points: list[Point], clusters_amt: int, graph: sp.Graph, processes_num: int = 0
 ) -> Iterator[tuple[list[Point], list[Segment]]]:
 ```
 
